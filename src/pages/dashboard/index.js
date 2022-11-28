@@ -64,18 +64,31 @@ import DefaultCell from 'layouts/dashboards/transactions/components/DefaultCell'
 import { createLinkToken, updateLinkToken } from 'store/user/user.action';
 import {
   getRecurringTransactions,
-  getTransactions
+  getTransactions,
+  getRecentTransactions
 } from 'store/transactions/transactions.action';
 
 import { recentTransColumns } from 'layouts/dashboards/transactions/data/recent-transactions-data';
 import { recurringTransColumns } from 'layouts/dashboards/transactions/data/recent-transactions-data';
 import Currency from 'components/Currency/currency.component';
+import moment from 'moment';
+import AddAccount from './components/add-account/add-account.component';
+import BudgetTable from 'examples/Tables/BudgetTable';
+import budgetTableData from './data/budgetTableData';
 
 const Dashboard = ({
   user: { currentUser, isLinkValid, loading },
-  transactions: { accounts, transactions, recurringTransactions },
+  transactions: {
+    accounts,
+    transactions,
+    recurringTransactions,
+    categories,
+    categoryLabels,
+    categoryAmounts
+  },
   getTransactions,
   getRecurringTransactions,
+  getRecentTransactions,
   createLinkToken
 }) => {
   useEffect(() => {
@@ -104,6 +117,12 @@ const Dashboard = ({
     }
   }, [currentUser?.accessToken, getRecurringTransactions]);
 
+  useEffect(() => {
+    if (currentUser?.accessToken) {
+      getRecentTransactions();
+    }
+  }, [currentUser?.accessToken, getRecentTransactions]);
+
   const [recurData, setRecurData] = useState([]);
   // build recent transactions table (separate later)
   const recurTransData = () => {
@@ -118,7 +137,12 @@ const Dashboard = ({
         ),
         due: (
           <DefaultCell>
-            {<Moment date={outflow.lastDate} format={'M/D'} />}
+            {
+              <Moment
+                date={moment(outflow.lastDate).add(1, 'M')}
+                format={'M/D'}
+              />
+            }
           </DefaultCell>
         ),
         amount: (
@@ -130,7 +154,6 @@ const Dashboard = ({
       data.push(dt);
     });
     setRecurData(data);
-    console.log(transData);
   };
 
   useEffect(() => {
@@ -171,7 +194,6 @@ const Dashboard = ({
       data.push(dt);
     });
     setTransData(data);
-    console.log(transData);
   };
 
   useEffect(() => {
@@ -191,6 +213,10 @@ const Dashboard = ({
         />
       ) : (
         <MDBox py={3}>
+          <MDBox mb={3}>
+            <AddAccount />
+          </MDBox>
+
           <MDBox mb={3}>
             <Grid container spacing={3}>
               {accounts?.map((account, i) => (
@@ -212,24 +238,12 @@ const Dashboard = ({
 
           <MDBox mb={3}>
             <Grid container spacing={3}>
-              <Grid item xs={12} sm={6} lg={4}>
+              <Grid item xs={12} sm={6} lg={6}>
                 <DefaultDoughnutChart
                   title="Categories"
-                  labels={[
-                    'Creative Tim',
-                    'Github',
-                    'Bootsnipp',
-                    'Dev.to',
-                    'Codeinwp'
-                  ]}
+                  labels={categoryLabels}
                   chart={{
-                    labels: [
-                      'Creative Tim',
-                      'Github',
-                      'Bootsnipp',
-                      'Dev.to',
-                      'Codeinwp'
-                    ],
+                    labels: categoryLabels,
                     datasets: {
                       label: 'Projects',
                       backgroundColors: [
@@ -239,17 +253,23 @@ const Dashboard = ({
                         'secondary',
                         'primary'
                       ],
-                      data: [15, 20, 12, 60, 20]
+                      hoverOffset: 10,
+                      data: categoryAmounts
                     }
                   }}
+                  transactions={transactions}
                 />
               </Grid>
 
-              <Grid item xs={12} sm={6} lg={4}>
-                <SalesTable title="Budgets" rows={salesTableData} />
+              <Grid item xs={12} sm={6} lg={6}>
+                <BudgetTable title="Budgets" rows={budgetTableData} />
               </Grid>
+            </Grid>
+          </MDBox>
 
-              <Grid item xs={12} sm={12} md={12} lg={4}>
+          <MDBox mb={3}>
+            <Grid container spacing={3}>
+              <Grid item lg={12} xl={12}>
                 <Card>
                   <MDBox pt={3} px={3}>
                     <MDTypography variant="h6" fontWeight="medium">
@@ -271,28 +291,28 @@ const Dashboard = ({
             </Grid>
           </MDBox>
 
-          <MDBox mb={3}></MDBox>
-
           <MDBox mb={3}>
-            <Grid item xs={12} sm={12} lg={12}>
-              <Card>
-                <MDBox pt={3} px={3}>
-                  <MDTypography variant="h6" fontWeight="medium">
-                    Recent Transactions
-                  </MDTypography>
-                </MDBox>
-                <MDBox py={1}>
-                  <TransactionTable
-                    data={transData}
-                    columns={recentTransColumns}
-                    transactions={transactions}
-                    entriesPerPage={false}
-                    showTotalEntries={false}
-                    isSorted={false}
-                    noEndBorder
-                  />
-                </MDBox>
-              </Card>
+            <Grid container spacing={3}>
+              <Grid item lg={12} xl={12}>
+                <Card>
+                  <MDBox pt={3} px={3}>
+                    <MDTypography variant="h6" fontWeight="medium">
+                      Recent Transactions
+                    </MDTypography>
+                  </MDBox>
+                  <MDBox py={1}>
+                    <TransactionTable
+                      data={transData}
+                      columns={recentTransColumns}
+                      transactions={transactions}
+                      entriesPerPage={false}
+                      showTotalEntries={false}
+                      isSorted={false}
+                      noEndBorder
+                    />
+                  </MDBox>
+                </Card>
+              </Grid>
             </Grid>
           </MDBox>
         </MDBox>
@@ -308,6 +328,7 @@ Dashboard.propTypes = {
   createLinkToken: PropTypes.func.isRequired,
   updateLinkToken: PropTypes.func.isRequired,
   getRecurringTransactions: PropTypes.func.isRequired,
+  getRecentTransactions: PropTypes.func.isRequired,
   getTransactions: PropTypes.func.isRequired
 };
 
@@ -320,5 +341,6 @@ export default connect(mapStateToProps, {
   createLinkToken,
   updateLinkToken,
   getRecurringTransactions,
+  getRecentTransactions,
   getTransactions
 })(Dashboard);

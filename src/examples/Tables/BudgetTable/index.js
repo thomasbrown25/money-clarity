@@ -30,32 +30,22 @@ import MDTypography from 'components/MDTypography';
 import MDBox from 'components/MDBox';
 
 // Material Dashboard 2 PRO React examples
-import SalesTableCell from 'examples/Tables/SalesTable/SalesTableCell';
+import BudgetTableCell from 'examples/Tables/BudgetTable/BudgetTableCell';
 
-function SalesTable({ title, rows, shadow }) {
+function BudgetTable({ title, rows, shadow }) {
   const renderTableCells = rows.map((row, key) => {
     const tableRows = [];
     const rowKey = `row-${key}`;
 
     Object.entries(row).map(([cellTitle, cellContent]) =>
-      Array.isArray(cellContent)
-        ? tableRows.push(
-            <SalesTableCell
-              key={cellContent[1]}
-              title={cellTitle}
-              content={cellContent[1]}
-              image={cellContent[0]}
-              noBorder={key === rows.length - 1}
-            />
-          )
-        : tableRows.push(
-            <SalesTableCell
-              key={cellContent}
-              title={cellTitle}
-              content={cellContent}
-              noBorder={key === rows.length - 1}
-            />
-          )
+      tableRows.push(
+        <BudgetTableCell
+          key={cellContent}
+          title={cellTitle}
+          content={cellContent}
+          noBorder={key === rows.length - 1}
+        />
+      )
     );
 
     return <TableRow key={rowKey}>{tableRows}</TableRow>;
@@ -79,18 +69,18 @@ function SalesTable({ title, rows, shadow }) {
   );
 }
 
-// Setting default values for the props of SalesTable
-SalesTable.defaultProps = {
+// Setting default values for the props of BudgetTable
+BudgetTable.defaultProps = {
   title: '',
   rows: [{}],
   shadow: true
 };
 
-// Typechecking props for the SalesTable
-SalesTable.propTypes = {
+// Typechecking props for the BudgetTable
+BudgetTable.propTypes = {
   title: PropTypes.string,
   rows: PropTypes.arrayOf(PropTypes.object),
   shadow: PropTypes.bool
 };
 
-export default SalesTable;
+export default BudgetTable;

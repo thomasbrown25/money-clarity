@@ -3,6 +3,9 @@ import { TRANSACTIONS_ACTION_TYPES } from './transactions.types';
 const initialState = {
   transactions: null,
   recentTransactions: null,
+  categories: null,
+  categoryLabels: null,
+  categoryAmounts: null,
   recurringTransactions: null,
   accounts: null,
   currentMonthSpend: 0,
@@ -24,7 +27,9 @@ const transactionsReducer = (state = initialState, action) => {
       return {
         ...state,
         recentTransactions: payload.transactions,
-        accounts: payload.accounts
+        categories: payload.categories,
+        categoryLabels: payload.categoryLabels,
+        categoryAmounts: payload.categoryAmounts
       };
 
     case TRANSACTIONS_ACTION_TYPES.GET_RECURRING_TRANSACTIONS_SUCCESS:

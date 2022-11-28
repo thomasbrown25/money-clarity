@@ -13,39 +13,67 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
 // porp-types is a library for typechecking of props
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 // react-chartjs-2 components
-import { Doughnut } from "react-chartjs-2";
+import { Doughnut } from 'react-chartjs-2';
 
 // @mui material components
-import Card from "@mui/material/Card";
-import Icon from "@mui/material/Icon";
+import Card from '@mui/material/Card';
+import Icon from '@mui/material/Icon';
 
 // Material Dashboard 2 PRO React components
-import MDBox from "components/MDBox";
-import MDTypography from "components/MDTypography";
+import MDBox from 'components/MDBox';
+import MDTypography from 'components/MDTypography';
 
 // DefaultDoughnutChart configurations
-import configs from "examples/Charts/DoughnutCharts/DefaultDoughnutChart/configs";
+import configs from 'examples/Charts/DoughnutCharts/DefaultDoughnutChart/configs';
 
-function DefaultDoughnutChart({ icon, title, description, height, chart }) {
-  const { data, options } = configs(chart.labels || [], chart.datasets || {}, chart.cutout);
+function DefaultDoughnutChart({
+  icon,
+  title,
+  categoryList,
+  height,
+  chart,
+  transactions
+}) {
+  const { data, options } = configs(
+    chart.labels || [],
+    chart.datasets || {},
+    chart.cutout
+  );
+
+  let myoptions = options;
+  myoptions.plugins = {
+    datalabels: {
+      display: true,
+      align: 'right',
+      backgroundColor: '#ccc',
+      borderRadius: 3,
+      font: {
+        size: 18
+      }
+    }
+  };
 
   const renderChart = (
     <MDBox py={2} pr={2} pl={icon.component ? 1 : 2}>
-      {title || description ? (
-        <MDBox display="flex" px={description ? 1 : 0} pt={description ? 1 : 0}>
+      {title || categoryList ? (
+        <MDBox
+          display="flex"
+          px={categoryList ? 1 : 0}
+          pt={categoryList ? 1 : 0}
+        >
           {icon.component && (
             <MDBox
               width="4rem"
               height="4rem"
-              bgColor={icon.color || "info"}
+              bgColor={icon.color || 'info'}
               variant="gradient"
-              coloredShadow={icon.color || "info"}
+              coloredShadow={icon.color || 'info'}
               borderRadius="xl"
               display="flex"
               justifyContent="center"
@@ -61,7 +89,7 @@ function DefaultDoughnutChart({ icon, title, description, height, chart }) {
             {title && <MDTypography variant="h6">{title}</MDTypography>}
             <MDBox mb={2}>
               <MDTypography component="div" variant="button" color="text">
-                {description}
+                {categoryList}
               </MDTypography>
             </MDBox>
           </MDBox>
@@ -70,7 +98,7 @@ function DefaultDoughnutChart({ icon, title, description, height, chart }) {
       {useMemo(
         () => (
           <MDBox height={height}>
-            <Doughnut data={data} options={options} />
+            <Doughnut data={data} options={myoptions} />
           </MDBox>
         ),
         [chart, height]
@@ -78,36 +106,38 @@ function DefaultDoughnutChart({ icon, title, description, height, chart }) {
     </MDBox>
   );
 
-  return title || description ? <Card>{renderChart}</Card> : renderChart;
+  return title || categoryList ? <Card>{renderChart}</Card> : renderChart;
 }
 
 // Setting default values for the props of DefaultDoughnutChart
 DefaultDoughnutChart.defaultProps = {
-  icon: { color: "info", component: "" },
-  title: "",
-  description: "",
-  height: "19.125rem",
+  icon: { color: 'info', component: '' },
+  title: '',
+  categoryList: '',
+  height: '19.125rem'
 };
 
 // Typechecking props for the DefaultDoughnutChart
 DefaultDoughnutChart.propTypes = {
   icon: PropTypes.shape({
     color: PropTypes.oneOf([
-      "primary",
-      "secondary",
-      "info",
-      "success",
-      "warning",
-      "error",
-      "light",
-      "dark",
+      'primary',
+      'secondary',
+      'info',
+      'success',
+      'warning',
+      'error',
+      'light',
+      'dark'
     ]),
-    component: PropTypes.node,
+    component: PropTypes.node
   }),
   title: PropTypes.string,
-  description: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  categoryList: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  chart: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.array, PropTypes.object])).isRequired,
+  chart: PropTypes.objectOf(
+    PropTypes.oneOfType([PropTypes.array, PropTypes.object])
+  ).isRequired
 };
 
 export default DefaultDoughnutChart;

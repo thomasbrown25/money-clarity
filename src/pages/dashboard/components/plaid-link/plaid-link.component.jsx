@@ -47,7 +47,6 @@ const PlaidLink = ({ linkToken, isLinkValid, publicTokenExchange }) => {
         component="a"
         variant="gradient"
         onClick={() => open()}
-        disabled={!ready}
         color="dark"
       >
         Sync Account
