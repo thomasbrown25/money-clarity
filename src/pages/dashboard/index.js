@@ -139,7 +139,11 @@ const Dashboard = ({
           <DefaultCell>
             {
               <Moment
-                date={moment(outflow.lastDate).add(1, 'M')}
+                date={
+                  outflow.frequency?.toLowerCase() === 'biweekly'
+                    ? moment(outflow.lastDate).add(15, 'days')
+                    : moment(outflow.lastDate).add(1, 'M')
+                }
                 format={'M/D'}
               />
             }
