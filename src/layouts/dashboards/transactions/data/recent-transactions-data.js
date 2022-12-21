@@ -34,7 +34,7 @@ export const recentTransColumns = [
 ];
 
 export const recurringTransColumns = [
-  { Header: 'name/frequency', accessor: 'name', width: '30%', align: 'left' },
+  { Header: 'name/frequency', accessor: 'name', width: '35%', align: 'left' },
   { Header: 'due', accessor: 'due' },
   { Header: 'amount', accessor: 'amount', align: 'right' }
 ];

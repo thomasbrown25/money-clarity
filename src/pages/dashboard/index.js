@@ -75,6 +75,7 @@ import moment from 'moment';
 import AddAccount from './components/add-account/add-account.component';
 import BudgetTable from 'examples/Tables/BudgetTable';
 import budgetTableData from './data/budgetTableData';
+import RecurringTransactions from 'components/recurring-transactions/recurring-transactions.component';
 
 const Dashboard = ({
   user: { currentUser, isLinkValid, loading },
@@ -109,19 +110,19 @@ const Dashboard = ({
     if (currentUser?.accessToken) {
       getTransactions();
     }
-  }, [currentUser?.accessToken, getTransactions]);
+  }, [currentUser?.accessToken, getTransactions, loading]);
 
   useEffect(() => {
     if (currentUser?.accessToken) {
       getRecurringTransactions();
     }
-  }, [currentUser?.accessToken, getRecurringTransactions]);
+  }, [currentUser?.accessToken, getRecurringTransactions, loading]);
 
   useEffect(() => {
     if (currentUser?.accessToken) {
       getRecentTransactions();
     }
-  }, [currentUser?.accessToken, getRecentTransactions]);
+  }, [currentUser?.accessToken, getRecentTransactions, loading]);
 
   const [recurData, setRecurData] = useState([]);
   // build recent transactions table (separate later)
@@ -193,7 +194,11 @@ const Dashboard = ({
               : transaction.categories[0]}
           </DefaultCell>
         ),
-        amount: <DefaultCell>{transaction.amount}</DefaultCell>
+        amount: (
+          <DefaultCell>
+            <Currency value={transaction.amount} />
+          </DefaultCell>
+        )
       };
       data.push(dt);
     });
@@ -281,14 +286,19 @@ const Dashboard = ({
                     </MDTypography>
                   </MDBox>
                   <MDBox py={1}>
-                    <TransactionTable
+                    {/* <TransactionTable
                       data={recurData}
                       columns={recurringTransColumns}
                       entriesPerPage={false}
                       showTotalEntries={false}
                       isSorted={false}
                       noEndBorder
-                    />
+                    /> */}
+                    {recurringTransactions && (
+                      <RecurringTransactions
+                        transactions={recurringTransactions}
+                      />
+                    )}
                   </MDBox>
                 </Card>
               </Grid>
@@ -308,7 +318,6 @@ const Dashboard = ({
                     <TransactionTable
                       data={transData}
                       columns={recentTransColumns}
-                      transactions={transactions}
                       entriesPerPage={false}
                       showTotalEntries={false}
                       isSorted={false}

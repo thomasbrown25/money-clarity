@@ -102,7 +102,7 @@ export default function App() {
     // log user out from all tabs if they log out in one tab
     window.addEventListener('storage', () => {
       if (!localStorage.token)
-        store.dispatch({ type: USER_ACTION_TYPES.SIGN_OUT_SUCCESS });
+        store.dispatch({ type: USER_ACTION_TYPES.SIGN_OUT });
     });
 
     //checking to see if we're getting env variables from azure
@@ -209,11 +209,11 @@ export default function App() {
       <Routes>
         <Route path="sign-in" element={<Login />} />
         <Route path="sign-up" element={<Login />} />
-        {/* <Route element={<PrivateRoutes />}> */}
-        {getRoutes(routes)}
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="*" element={<Navigate to="/dashboard" />} />
-        {/* </Route> */}
+        <Route element={<PrivateRoutes />}>
+          {getRoutes(routes)}
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="*" element={<Navigate to="/dashboard" />} />
+        </Route>
       </Routes>
     </ThemeProvider>
   );

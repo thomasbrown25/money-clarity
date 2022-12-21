@@ -11,8 +11,6 @@ const PrivateRoutes = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const isLoading = useSelector(selectIsLoadingAuth);
 
-  console.log(`is auth loading: ${isLoading}`);
-
   return !isLoading && isAuthenticated ? <Outlet /> : <Navigate to="sign-in" />;
 };
 

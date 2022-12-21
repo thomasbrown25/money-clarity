@@ -5,10 +5,10 @@ import { USER_ACTION_TYPES } from 'store/user/user.types';
 
 // Create an instance of axios
 export const api = axios.create({
-    baseURL: process.env.REACT_APP_API,
-    headers: {
-        'Content-Type': 'application/json; charset=utf-8'
-    }
+  baseURL: process.env.REACT_APP_API,
+  headers: {
+    'Content-Type': 'application/json; charset=utf-8'
+  }
 });
 
 /*
@@ -34,21 +34,21 @@ export const api = axios.create({
 */
 
 api.interceptors.response.use(
-    (res) => res,
-    (err) => {
-        if (err.response && err.response.status === 401) {
-            // store.dispatch({ type: USER_ACTION_TYPES.SIGN_OUT });
-        }
-        return Promise.reject(err);
+  (res) => res,
+  (err) => {
+    if (err.response && err.response.status === 401) {
+      // store.dispatch({ type: USER_ACTION_TYPES.SIGN_OUT });
     }
+    return Promise.reject(err);
+  }
 );
 
 export const setAuthToken = (token) => {
-    if (token) {
-        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        localStorage.setItem('token', token);
-    } else {
-        delete api.defaults.headers.common['bearer'];
-        localStorage.removeItem('token');
-    }
+  if (token) {
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    localStorage.setItem('token', token);
+  } else {
+    delete api.defaults.headers.common['bearer'];
+    localStorage.removeItem('token');
+  }
 };
