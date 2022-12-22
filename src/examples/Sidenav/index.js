@@ -20,6 +20,7 @@ import { useLocation, NavLink } from 'react-router-dom';
 
 // prop-types is a library for typechecking of props.
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 // @mui material components
 import List from '@mui/material/List';
@@ -40,6 +41,8 @@ import SidenavItem from 'examples/Sidenav/SidenavItem';
 import SidenavRoot from 'examples/Sidenav/SidenavRoot';
 import sidenavLogoLabel from 'examples/Sidenav/styles/sidenav';
 
+import { logout } from 'store/user/user.action';
+
 // Material Dashboard 2 PRO React context
 import {
   useMaterialUIController,
@@ -48,7 +51,7 @@ import {
   setWhiteSidenav
 } from 'context';
 
-function Sidenav({ color, brand, brandName, routes, ...rest }) {
+function Sidenav({ color, brand, brandName, routes, logout, ...rest }) {
   const [openCollapse, setOpenCollapse] = useState(false);
   const [openNestedCollapse, setOpenNestedCollapse] = useState(false);
   const [controller, dispatch] = useMaterialUIController();
@@ -126,7 +129,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   };
   // Render the all the collpases from the routes.js
   const renderCollapse = (collapses) =>
-    collapses.map(({ name, collapse, route, href, key }) => {
+    collapses.map(({ name, collapse, route, href, key, action }) => {
       let returnValue;
 
       if (collapse) {
@@ -147,8 +150,8 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
             {renderNestedCollapse(collapse)}
           </SidenavItem>
         );
-      } else {
-        returnValue = href ? (
+      } else if (href) {
+        returnValue = (
           <Link
             href={href}
             key={key}
@@ -158,7 +161,20 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           >
             <SidenavItem color={color} name={name} active={key === itemName} />
           </Link>
-        ) : (
+        );
+      } else if (action) {
+        returnValue = (
+          <NavLink to={route} key={key} sx={{ textDecoration: 'none' }}>
+            <SidenavItem
+              onClick={logout}
+              color={color}
+              name={name}
+              active={key === itemName}
+            />
+          </NavLink>
+        );
+      } else {
+        returnValue = (
           <NavLink to={route} key={key} sx={{ textDecoration: 'none' }}>
             <SidenavItem color={color} name={name} active={key === itemName} />
           </NavLink>
@@ -169,7 +185,18 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
 
   // Render all the routes from the routes.js (All the visible items on the Sidenav)
   const renderRoutes = routes.map(
-    ({ type, name, icon, title, collapse, noCollapse, key, href, route }) => {
+    ({
+      type,
+      name,
+      icon,
+      title,
+      collapse,
+      noCollapse,
+      key,
+      href,
+      route,
+      action
+    }) => {
       let returnValue;
 
       if (type === 'collapse') {
@@ -323,7 +350,10 @@ Sidenav.propTypes = {
   ]),
   brand: PropTypes.string,
   brandName: PropTypes.string.isRequired,
-  routes: PropTypes.arrayOf(PropTypes.object).isRequired
+  routes: PropTypes.arrayOf(PropTypes.object).isRequired,
+  logout: PropTypes.func.isRequired
 };
 
-export default Sidenav;
+export default connect(null, {
+  logout
+})(Sidenav);

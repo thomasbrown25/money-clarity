@@ -54,6 +54,8 @@ import PrivateRoutes from 'utils/private-route';
 // Material Dashboard 2 PRO React routes
 import routes from 'routes';
 
+import './assets/global.css';
+
 // Material Dashboard 2 PRO React contexts
 import {
   useMaterialUIController,

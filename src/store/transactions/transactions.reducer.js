@@ -3,12 +3,13 @@ import { TRANSACTIONS_ACTION_TYPES } from './transactions.types';
 const initialState = {
   transactions: null,
   recentTransactions: null,
-  categories: null,
-  categoryLabels: null,
-  categoryAmounts: null,
+  categories: { labels: null, amounts: null, list: null },
   recurringTransactions: null,
   accounts: null,
-  currentMonthSpend: 0,
+  expenseTransactions: null,
+  incomeTransactions: null,
+  currentMonthExpense: 0,
+  currentMonthIncome: 0,
   error: null,
   isLoading: false
 };
@@ -21,27 +22,35 @@ const transactionsReducer = (state = initialState, action) => {
       return {
         ...state,
         transactions: payload.transactions,
+
         accounts: payload.accounts
       };
+
     case TRANSACTIONS_ACTION_TYPES.GET_RECENT_TRANSACTIONS_SUCCESS:
       return {
         ...state,
         recentTransactions: payload.transactions,
-        categories: payload.categories,
-        categoryLabels: payload.categoryLabels,
-        categoryAmounts: payload.categoryAmounts
+        categories: {
+          ...state,
+          list: payload.categories,
+          labels: payload.categoryLabels,
+          amounts: payload.categoryAmounts
+        }
       };
 
     case TRANSACTIONS_ACTION_TYPES.GET_RECURRING_TRANSACTIONS_SUCCESS:
       return {
         ...state,
-        recurringTransactions: payload
+        recurringTransactions: payload.transactions,
+        expenseTransactions: payload.expense,
+        incomeTransactions: payload.income
       };
 
     case TRANSACTIONS_ACTION_TYPES.GET_CURRENT_SPEND_MONTH_SUCCESS:
       return {
         ...state,
-        currentMonthSpend: payload
+        currentMonthExpense: payload.expense,
+        currentMonthIncome: payload.income
       };
 
     case TRANSACTIONS_ACTION_TYPES.GET_TRANSACTIONS_SUCCESS:

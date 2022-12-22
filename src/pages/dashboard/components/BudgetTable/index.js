@@ -28,9 +28,9 @@ import TableRow from '@mui/material/TableRow';
 // Material Dashboard 2 PRO React components
 import MDTypography from 'components/MDTypography';
 import MDBox from 'components/MDBox';
+import BudgetTableCell from './BudgetTableCell';
 
 // Material Dashboard 2 PRO React examples
-import BudgetTableCell from 'examples/Tables/BudgetTable/BudgetTableCell';
 
 function BudgetTable({ title, rows, shadow }) {
   const renderTableCells = rows.map((row, key) => {

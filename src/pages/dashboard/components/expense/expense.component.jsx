@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import DataTable from 'examples/Tables/DataTable';
-import ProductCell from 'layouts/dashboards/transactions/components/ProductCell';
 import Currency from 'components/Currency/currency.component';
 import Moment from 'react-moment';
 import moment from 'moment';
-import DefaultCell from 'layouts/dashboards/transactions/components/DefaultCell';
+import ProductCell from 'components/ProductCell';
+import DefaultCell from 'components/DefaultCell';
 
-const RecurringTransactions = ({ transactions }) => {
+const Expense = ({ transactions }) => {
   const [rows, setRows] = useState([]);
 
   const fillRows = () => {
@@ -69,4 +69,4 @@ const RecurringTransactions = ({ transactions }) => {
   );
 };
 
-export default RecurringTransactions;
+export default Expense;

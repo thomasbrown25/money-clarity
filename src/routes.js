@@ -76,6 +76,7 @@ import Icon from '@mui/material/Icon';
 
 // Images
 import profilePicture from 'assets/images/team-3.jpg';
+import { logout } from 'store/user/user.action';
 
 const routes = [
   {
@@ -99,8 +100,7 @@ const routes = [
       {
         name: 'Logout',
         key: 'logout',
-        route: '/sign-in',
-        component: <Login />
+        action: logout()
       }
     ]
   },

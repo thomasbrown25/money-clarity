@@ -77,6 +77,7 @@ import TodayIcon from '@mui/icons-material/Today';
 
 // Images
 import profilePicture from 'assets/images/team-3.jpg';
+import { logout } from 'store/user/user.action';
 
 const navbarRoutes = [
   {
@@ -101,7 +102,8 @@ const navbarRoutes = [
         name: 'Logout',
         key: 'logout',
         route: '/sign-in',
-        component: <Login />
+        component: <Login />,
+        action: logout()
       }
     ]
   },

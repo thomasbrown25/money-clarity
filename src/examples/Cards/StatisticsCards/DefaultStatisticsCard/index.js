@@ -31,10 +31,11 @@ import Currency from 'components/Currency/currency.component';
 
 function DefaultStatisticsCard({
   title,
-  count,
+  income,
   percentage,
   dropdown,
-  currency
+  expense,
+  description
 }) {
   const [controller] = useMaterialUIController();
   const { darkMode } = controller;
@@ -46,18 +47,38 @@ function DefaultStatisticsCard({
           <Grid item xs={7}>
             <MDBox mb={0.5} lineHeight={1}>
               <MDTypography
-                variant="button"
+                variant="h6"
                 fontWeight="medium"
-                color="text"
                 textTransform="capitalize"
               >
                 {title}
               </MDTypography>
             </MDBox>
             <MDBox lineHeight={1}>
-              <MDTypography variant="h5" fontWeight="bold">
-                {currency ? <Currency value={count} /> : count}
+              <MDTypography
+                variant="h5"
+                fontWeight="bold"
+                className="pb-4"
+                color="success"
+              >
+                +{income ? <Currency value={income} /> : income}
               </MDTypography>
+              <MDTypography
+                variant="h5"
+                fontWeight="bold"
+                className="pb-4"
+                color="primary"
+              >
+                {expense ? <Currency value={expense} /> : expense}
+              </MDTypography>
+              <MDTypography
+                variant="button"
+                fontWeight="regular"
+                color={darkMode ? 'text' : 'secondary'}
+              >
+                {description}
+              </MDTypography>
+
               <MDTypography
                 variant="button"
                 fontWeight="bold"
